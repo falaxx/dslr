@@ -28,7 +28,6 @@ def pair_plot(dataset,features,legend):
 	plt.legend(legend, loc='upper left', frameon=False, bbox_to_anchor=(1, 1))
 	plt.show()
 
-
 if __name__ == '__main__':
 	dataset = load_csv('./datasets/dataset_train.csv')
 	data = dataset[1:, :]
