@@ -42,7 +42,7 @@ if __name__ == '__main__':
 			# un graph par combinaison de matiere
 			X = np.array(data[:, i], dtype=float)
 			y = np.array(data[:, j], dtype=float)
-			legend = ['Grynffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin']
+			legend = ['Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin']
 			if (dataset[0, i] != dataset[0, j]):
 				scatter_plot(X, y, legend=legend, xlabel=dataset[0, i], ylabel=dataset[0, j], show=1)
 
