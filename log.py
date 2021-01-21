@@ -71,10 +71,9 @@ data = pd.read_csv(filename,dtype=str)
 # data_T = data.T
 data.dtypes
 data.columns = ['Index','Hogwarts House','First Name','Last Name','Birthday','Best Hand','Arithmancy','Astronomy','Herbology','Defense Against the Dark Arts','Divination','Muggle Studies','Ancient Runes','History of Magic','Transfiguration','Potions','Care of Magical Creatures','Charms','Flying']
-
+data = data.dropna()
 y_data = data['Hogwarts House'].values  #segregating the label value from the feature value.
-X = data.drop(['Index','Hogwarts House','First Name','Last Name','Birthday','Best Hand','Index'],axis=1).values
-
+X = data.drop(['Index','Hogwarts House','First Name','Last Name','Birthday','Best Hand',],axis=1).values
 scaler = StandardScaler()
 X= scaler.fit_transform(X)
 print(X)
@@ -82,7 +81,7 @@ scores = []
 
 from sklearn.model_selection import train_test_split
 for _ in range (10):
-    X_train,X_test,y_train,y_test = train_test_split(X,y_data,test_size = 0.33)
+    X_train,X_test,y_train,y_test = train_test_split(X,y_data,test_size = 0.80)
     logi = LogisticRegression(n_iteration=30000).fit(X_train, y_train)
     predition1 = logi.predict(X_test)
     score1 = logi.score(X_test,y_test)

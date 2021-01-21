@@ -9,17 +9,32 @@ def pair_plot_scatter(ax, x, y):
   ax.scatter(x[856:1299], y[856:1299], s=1, color='blue', alpha=0.5)
   ax.scatter(x[1299:], y[1299:], s=1, color='green', alpha=0.5)
 
+def pair_plot_hist(ax, X):
+
+	h1 = X[:327][~np.isnan(X[:327])]
+	h2 = X[327:856][~np.isnan(X[327:856])]
+	h3 = X[856:1299][~np.isnan(X[856:1299])]
+	h4 = X[1299:][~np.isnan(X[1299:])]
+	ax.hist(h1, alpha=0.5)
+	ax.hist(h2, alpha=0.5)
+	ax.hist(h3, alpha=0.5)
+	ax.hist(h4, alpha=0.5)
+
 def pair_plot(dataset,features,legend):
 
-	_, ax = plt.subplots(nrows=13, ncols=13, sharex='col', sharey='row',gridspec_kw={'hspace': 0, 'wspace': 0})
+	_, ax = plt.subplots(nrows=13, ncols=13,gridspec_kw={'hspace': 0, 'wspace': 0})
 	for row in range(6, 19):
 		for col in range(6, 19):
 			# un subplot par combinaison
-			ax[row-6, col-6].tick_params(labelbottom=False)
-			ax[row-6, col-6].tick_params(labelleft=False)
+			ax[row-6, col-6].tick_params(labelbottom=False,labelleft=False)
 			x = np.array(dataset[:, col], dtype=float)
 			y = np.array(dataset[:, row], dtype=float)
-			pair_plot_scatter(ax[row-6,col-6], x, y)
+			if col == row:
+				ax[row-6, col-6].tick_params(reset='True')
+				ax[row-6, col-6].tick_params(labelbottom=False,labelleft=False)
+				pair_plot_hist(ax[row-6, col-6], y)
+			else:
+				pair_plot_scatter(ax[row-6,col-6], x, y)
 			# mets le label  
 			if ax[row-6, col-6].is_last_row():
 				ax[row-6, col-6].set_xlabel(features[col-6].replace(' ', '\n'))

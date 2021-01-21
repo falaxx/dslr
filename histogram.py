@@ -8,30 +8,16 @@ from utils import percentile, mean, std
 
 def histogram(X, legend, title, xlabel, ylabel, show):
 	#  divise la data en 4 ecoles
-	h1 = X[:327]
-	h1 = h1[~np.isnan(h1)]
-	h1mean = percentile(h1,0.50)
-
-	h2 = X[327:856]
-	h2 = h2[~np.isnan(h2)]
-	h2mean = percentile(h2,0.50)
-
-	h3 = X[856:1299]
-	h3 = h3[~np.isnan(h3)]
-	h3mean = percentile(h3,0.50)
-
-	h4 = X[1299:]
-	h4 = h4[~np.isnan(h4)]
-	h4mean = percentile(h4,0.50)
-
-	# cherche le meilleur combo
-
-
+	h1 = X[:327][~np.isnan(X[:327])]
+	h2 = X[327:856][~np.isnan(X[327:856])]
+	h3 = X[856:1299][~np.isnan(X[856:1299])]
+	h4 = X[1299:][~np.isnan(X[1299:])]
+	
 	dataset = list()
-	dataset.append(h1mean)
-	dataset.append(h2mean)
-	dataset.append(h3mean)
-	dataset.append(h4mean)
+	dataset.append(percentile(h1,0.50))
+	dataset.append(percentile(h2,0.50))
+	dataset.append(percentile(h3,0.50))
+	dataset.append(percentile(h4,0.50))
 	print(title)
 	print("deviation of median")
 	print(std(dataset))

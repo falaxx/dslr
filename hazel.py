@@ -68,6 +68,7 @@ filename = 'hazelnuts.txt'
 data = pd.read_csv(filename,sep='\t', header=None,dtype=str)
 #Transposing the data
 data_T = data.T
+data_T = data_T.dropna()
 data_T.dtypes
 data_T.columns = ['sample_id','length', 'width','thickness','surface_area',
                   'mass','compactness','hardness','shell_top_radius','water_content','carbohydrate_content','variety']
