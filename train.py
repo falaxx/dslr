@@ -3,12 +3,12 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import argparse
 from sklearn import preprocessing
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import StandardScaler
 
 class LogisticRegression(object):
-    
     def __init__(Logreg, alpha=0.01, n_iteration=100):  #This function intializes the alpha value and iteration 
         Logreg.alpha = alpha                            #value in the object
         Logreg.n_iter = n_iteration
@@ -48,8 +48,10 @@ class LogisticRegression(object):
 
     def predict(Logreg, X): # this function calls the max predict function to classify the individul feauter
         X = np.insert(X, 0, 1, axis=1)
+        # for i in X:
+        #     for theta, c in Logreg.theta:
+        #         X_predicted = max(Logreg._sigmoid_function(i.dot(theta)), c) 
         X_predicted = [max((Logreg._sigmoid_function(i.dot(theta)), c) for theta, c in Logreg.theta)[1] for i in X ]
-
         return X_predicted
 
     def score(Logreg,X, y): #This function compares the predictd label with the actual label to find the model performance
@@ -63,18 +65,22 @@ class LogisticRegression(object):
             plt.xlabel("Number of Iterations")
             plt.ylabel("Cost")
             plt.show()
-                
-# We are reading and processing the data provided
-filename = './datasets/dataset_train.csv'
-try:
+
+
+if __name__ == '__main__':
+    # try:
+        # parsing
+    parser = argparse.ArgumentParser()
+    parser.add_argument("dataset", type=str, help="dataset")
+    args = parser.parse_args()
+    filename = args.dataset
     data = pd.read_csv(filename,dtype=str)
-    #Transposing the data
-    # data_T = data.T
     data.dtypes
     data.columns = ['Index','Hogwarts House','First Name','Last Name','Birthday','Best Hand','Arithmancy','Astronomy','Herbology','Defense Against the Dark Arts','Divination','Muggle Studies','Ancient Runes','History of Magic','Transfiguration','Potions','Care of Magical Creatures','Charms','Flying']
     data = data.dropna()
     y_data = data['Hogwarts House'].values  #segregating the label value from the feature value.
     X = data.drop(['Index','Hogwarts House','First Name','Last Name','Birthday','Best Hand',],axis=1).values
+    # scaling
     scaler = StandardScaler()
     X= scaler.fit_transform(X)
     print(X)
@@ -90,5 +96,6 @@ try:
         scores.append(score1)
     print(np.mean(scores))
     logi._plot_cost(logi.cost) # Here we ae plotting the Cost value and showing how it is depreciating close to 0 with each iteration
-except:
-    print("error")
+    # except:
+    #     print("error")
+    #     exit(0)
