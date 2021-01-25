@@ -1,15 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
-from describe import describe,load_csv
+from utils import load_csv
 
-def pair_plot_scatter(ax, x, y):
+def scatter(ax, x, y):
   ax.scatter(x[:327], y[:327], s=1, color='red', alpha=0.5)
   ax.scatter(x[327:856], y[327:856], s=1, color='yellow', alpha=0.5)
   ax.scatter(x[856:1299], y[856:1299], s=1, color='blue', alpha=0.5)
   ax.scatter(x[1299:], y[1299:], s=1, color='green', alpha=0.5)
 
-def pair_plot_hist(ax, X):
+def hist(ax, X):
 
 	h1 = X[:327][~np.isnan(X[:327])]
 	h2 = X[327:856][~np.isnan(X[327:856])]
@@ -32,9 +32,9 @@ def pair_plot(dataset,features,legend):
 			if col == row:
 				ax[row-6, col-6].tick_params(reset='True')
 				ax[row-6, col-6].tick_params(labelbottom=False,labelleft=False)
-				pair_plot_hist(ax[row-6, col-6], y)
+				hist(ax[row-6, col-6], y)
 			else:
-				pair_plot_scatter(ax[row-6,col-6], x, y)
+				scatter(ax[row-6,col-6], x, y)
 			# mets le label  
 			if ax[row-6, col-6].is_last_row():
 				ax[row-6, col-6].set_xlabel(features[col-6].replace(' ', '\n'))
@@ -44,11 +44,15 @@ def pair_plot(dataset,features,legend):
 	plt.show()
 
 if __name__ == '__main__':
-	dataset = load_csv('./datasets/dataset_train.csv')
-	data = dataset[1:, :]
-	data = data[data[:, 1].argsort()]
-	features = dataset[0, 6:]
-	legend = ['Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin']
+	try:
+		dataset = load_csv('./datasets/dataset_train.csv')
+		data = dataset[1:, :]
+		data = data[data[:, 1].argsort()]
+		features = dataset[0, 6:]
+		legend = ['Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin']
 
-	pair_plot(data,features,legend)
-	plt.show()
+		pair_plot(data,features,legend)
+		plt.show()
+	except:
+		print("error")
+		exit(0)
