@@ -3,6 +3,10 @@ import csv
 
 # all the fonctions needed for other files
 
+
+def decimal_str(x: float, decimals: int = 10) -> str:
+	return format(x, f".{decimals}f").lstrip().rstrip('0')
+
 def load_csv(filename):
 	dataset = list()
 	try:
@@ -44,7 +48,7 @@ def max_(X):
 	return round(res,6)
 
 def std_(X):
-	m = mean_(X)
+	m = mean(X)
 	res = 0
 	for i in range (0,len(X)):
 		res += (X[i] - m) ** 2
