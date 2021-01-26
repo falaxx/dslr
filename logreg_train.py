@@ -13,7 +13,6 @@ def decimal_str(x: float, decimals: int = 10) -> str:
 
 if __name__ == '__main__':
 	try:
-		# parsing
 		parser = argparse.ArgumentParser()
 		parser.add_argument("dataset", type=str, help="dataset")
 		args = parser.parse_args()
@@ -32,13 +31,13 @@ if __name__ == '__main__':
 		y = data['Hogwarts House'].values
 		x = data.drop(['Index','Hogwarts House','First Name','Last Name','Birthday','Best Hand',],axis=1).values
 		logi = LogObj(iteration=1000)
-		logi = logi.fit(x, y)
+		logi = logi.fit_(x, y)
 		print("Predictions in progress..")
 		predictionall = logi.predict(x)
 		print("The accuracy I calculated for the model is "+ str(sum(logi.predict(x) == y) / len(y)))
 		print("Accuracy from sklearn = " + str(accuracy_score(y, predictionall)))
 		f = open("weights.csv", "w")
-		for i in range(0,4):
+		for i in range(0,len(np.unique(y))):
 			for j in range(0,len(logi.theta[i][0])):
 				f.write(decimal_str(logi.theta[i][0][j]))	
 				f.write(" ")

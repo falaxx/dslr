@@ -25,7 +25,7 @@ def pair_plot(dataset,features,legend):
 	_, ax = plt.subplots(nrows=13, ncols=13,gridspec_kw={'hspace': 0, 'wspace': 0})
 	for row in range(6, 19):
 		for col in range(6, 19):
-			# un subplot par combinaison
+			# one subplot/combinaison
 			ax[row-6, col-6].tick_params(labelbottom=False,labelleft=False)
 			x = np.array(dataset[:, col], dtype=float)
 			y = np.array(dataset[:, row], dtype=float)
@@ -35,7 +35,6 @@ def pair_plot(dataset,features,legend):
 				hist(ax[row-6, col-6], y)
 			else:
 				scatter(ax[row-6,col-6], x, y)
-			# mets le label  
 			if ax[row-6, col-6].is_last_row():
 				ax[row-6, col-6].set_xlabel(features[col-6].replace(' ', '\n'))
 			if ax[row-6, col-6].is_first_col():
@@ -50,7 +49,6 @@ if __name__ == '__main__':
 		data = data[data[:, 1].argsort()]
 		features = dataset[0, 6:]
 		legend = ['Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin']
-
 		pair_plot(data,features,legend)
 		plt.show()
 	except:

@@ -1,7 +1,44 @@
 import numpy as np
 import csv
-
 # all the fonctions needed for other files
+
+def mean_(x):
+	res = 0
+	for i in range (0,len(x)):
+		res += x[i]
+	return round((res / len(x)),6)
+
+def min_(x):
+	res = 1000000.0
+	for i in range (0,len(x)):
+		if x[i] < res:
+			res = x[i]
+	return round(res,6)
+
+def max_(x):
+	x = list(x)
+	res = -1000000.0
+	for i in range (0,len(x)):
+		if x[i] > res:
+			res = x[i]
+	return round(res,6)
+
+def std_(x):
+	m = mean_(x)
+	res = 0
+	for i in range (0,len(x)):
+		res += (x[i] - m) ** 2
+	res = (res / len(x)) ** 0.5
+	return round(res,6)
+
+def percentile_(x, percent):
+	x.sort()
+	rank = percent * (len(x) - 1)
+	f = np.floor(rank)
+	c = np.ceil(rank)
+	if f == c:
+		return round(x[int(rank)],6)
+	return round((x[int((c + f) / 2)]), 6)
 
 class LogObj(object):
 
@@ -12,14 +49,13 @@ class LogObj(object):
 	def sigmoid_(Logreg,x):
 		return 1 / (1 + np.exp(-x))
 	
-	# here
 	def gradient_descent_(Logreg,x,h,theta,y,m,):
 		return  (theta - Logreg.lr * np.dot(x.T, (h - y)) / m)
 	
 	def cost_(Logreg,h,theta, y):
 		return (1 / len(y)) * (np.sum(-y.T.dot(np.log(h)) - (1 - y).T.dot(np.log(1 - h))))
 	
-	def fit(Logreg,x,y):
+	def fit_(Logreg,x,y):
 		print("Processing data..")
 		Logreg.theta = []
 		Logreg.cost = []
@@ -32,7 +68,6 @@ class LogObj(object):
 			for _ in range(Logreg.iteration):
 				z = x.dot(theta)
 				h = Logreg.sigmoid_(z)
-				# print (z)
 				theta = Logreg.gradient_descent_(x,h,theta,y_1vsall,m)
 				cost.append(Logreg.cost_(h,theta,y_1vsall)) 
 			Logreg.theta.append((theta, i))
@@ -44,8 +79,15 @@ class LogObj(object):
 		x = np.insert(x, 0, 1, axis=1)
 		prediction = list()
 		for i in x:
-			prediction.append(max((Logreg.sigmoid_(i.dot(theta)), c) for theta, c in Logreg.theta)[1])
+			res2 = ""
+			res = 0
+			for theta, c in Logreg.theta:
+				if Logreg.sigmoid_(i.dot(theta)) > res:
+					res = Logreg.sigmoid_(i.dot(theta))
+					res2 = c
+			prediction.append(res2)
 		return prediction
+
 
 def decimal_str(x: float, decimals: int = 10) -> str:
 	return format(x, f".{decimals}f").lstrip().rstrip('0')
@@ -69,40 +111,3 @@ def load_csv(filename):
 	except:
 		print("error")
 		exit(0)
-
-def mean_(X):
-	res = 0
-	for i in range (0,len(X)):
-		res += X[i]
-	return round((res / len(X)),6)
-
-def min_(X):
-	res = 1000000.0
-	for i in range (0,len(X)):
-		if X[i] < res:
-			res = X[i]
-	return round(res,6)
-
-def max_(X):
-	res = -1000000.0
-	for i in range (0,len(X)):
-		if X[i] > res:
-			res = X[i]
-	return round(res,6)
-
-def std_(X):
-	m = mean_(X)
-	res = 0
-	for i in range (0,len(X)):
-		res += (X[i] - m) ** 2
-	res = (res / len(X)) ** 0.5
-	return round(res,6)
-
-def percentile_(X, percent):
-	X.sort()
-	rank = percent * (len(X) - 1)
-	f = np.floor(rank)
-	c = np.ceil(rank)
-	if f == c:
-		return round(X[int(rank)],6)
-	return round((X[int((c + f) / 2)]), 6)

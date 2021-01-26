@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from utils import percentile_,std_,load_csv
 
 def histogram(X, legend, title, xlabel, ylabel, show):
-	#  divise la data en 4 ecoles
+	#  divide data
 	h1 = X[:327][~np.isnan(X[:327])]
 	h2 = X[327:856][~np.isnan(X[327:856])]
 	h3 = X[856:1299][~np.isnan(X[856:1299])]
@@ -21,7 +21,7 @@ def histogram(X, legend, title, xlabel, ylabel, show):
 	print("deviation of median")
 	print(std_(dataset))
 
-	# montre le graph choisi
+	# show good graph
 	if show == 1:
 		plt.hist(h1, color='red', alpha=0.3, stacked = True)
 		plt.hist(h2, color='yellow', alpha=0.3, stacked = True)
@@ -44,7 +44,7 @@ if __name__ == '__main__':
 		# j = 1000000.0
 		save = 1000000.0
 		res = 6
-		# test toutes les categories
+		# test all categories
 		for i in range(6, 19):
 			X = np.array(data[:, i], dtype=float)
 			legend = ['Ravenclaw', 'Slytherin','Gryffindor', 'Hufflepuff']
@@ -54,7 +54,7 @@ if __name__ == '__main__':
 				res = i
 		X = np.array(data[:, res], dtype=float)
 		legend = ['Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin']
-		# montre que la bonne
+		# show right one
 		histogram(X, legend=legend, title=dataset[0, res], xlabel='Grades', ylabel='Students', show=1)
 
 	except:
