@@ -50,41 +50,11 @@ if __name__ == '__main__':
 		thetas.append((weight[1], "Hufflepuff"))
 		thetas.append((weight[2], "Ravenclaw"))
 		thetas.append((weight[3], "Slytherin"))
-		print(thetas)
 		prediction = predict(thetas,x)
 		f = open("houses.csv", 'w+')
 		f.write('Index,Hogwarts House\n')
 		for i in range(0, len(prediction)):
 			f.write(f'{i},{prediction[i]}\n')
-		print(len(prediction))
-		print(len(data))
-		# scores = []
-
-		# # for _ in range (1):
-		# x_train,x_test,y_train,y_test = train_test_split(x,y_data,test_size = 0.30)
-		# logi = LogObj(iteration=1000)
-		# logi = logi.fit(x_train, y_train)
-		# print("Predictions in progress..")
-		# predition1 = logi.predict(x_test)
-		# print("predictions done!")
-		# print("Calculating accuracy..")
-		# score1 = logi.score(x_test,y_test)
-		# print("the accuracy of the model is ",score1)
-		# scores.append(score1)
-		# print(np.mean(scores))
-		# print(logi.theta)
-
-		# f = open("weights.csv", "w")
-		# for i in range(0,4):
-		# 	for j in range(0,len(logi.theta[i][0])):
-		# 		# if  np.char.isnumeric(logi.theta[i][0][j])==True:
-		# 		print((logi.theta[i][0][j]))
-		# 		f.write(decimal_str(logi.theta[i][0][j]))	
-		# 		f.write(" ")
-		# 	f.write("\n")
-
-		# f.close()
-
 	except:
 		print("error")
 		exit(0)
