@@ -1,15 +1,12 @@
-
-#We are importing all necessary libraries to implement our model
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import argparse
 from sklearn.metrics import accuracy_score
-from utils import LogObj,std_,mean_
+from utils import LogObj,std_,mean_,exit_,sum_
 
 def decimal_str(x: float, decimals: int = 10) -> str:
 	return format(x, f".{decimals}f").lstrip().rstrip('0')
-
 
 if __name__ == '__main__':
 	try:
@@ -22,6 +19,7 @@ if __name__ == '__main__':
 		data.dtypes
 		cols = ['Arithmancy','Astronomy','Herbology','Defense Against the Dark Arts','Divination','Muggle Studies','Ancient Runes','History of Magic','Transfiguration','Potions','Care of Magical Creatures','Charms','Flying']
 		data.columns = ['Index','Hogwarts House','First Name','Last Name','Birthday','Best Hand','Arithmancy','Astronomy','Herbology','Defense Against the Dark Arts','Divination','Muggle Studies','Ancient Runes','History of Magic','Transfiguration','Potions','Care of Magical Creatures','Charms','Flying']
+
 		print("Scaling data..")
 		for col in cols:
 			data[col] = data[col].apply(lambda x: float(x) if x == x else "")
@@ -29,13 +27,18 @@ if __name__ == '__main__':
 			mean = mean_(data[col])
 			data[col] = (data[col] - mean) / std
 		y = data['Hogwarts House'].values
+		if (len(np.unique(y)) != 4):
+			print("Need 4 Houses in csv")
+			exit_()
 		x = data.drop(['Index','Hogwarts House','First Name','Last Name','Birthday','Best Hand',],axis=1).values
+		
 		logi = LogObj(iteration=1000)
 		logi = logi.fit_(x, y)
 		print("Predictions in progress..")
 		predictionall = logi.predict(x)
-		print("The accuracy I calculated for the model is "+ str(sum(logi.predict(x) == y) / len(y)))
+		print("The accuracy I calculated for the model is "+ str(sum_(logi.predict(x) == y) / len(y)))
 		print("Accuracy from sklearn = " + str(accuracy_score(y, predictionall)))
+		
 		f = open("weights.csv", "w")
 		for i in range(0,len(np.unique(y))):
 			for j in range(0,len(logi.theta[i][0])):
@@ -44,6 +47,7 @@ if __name__ == '__main__':
 			f.write("\n")
 		f.close()
 		print("Weights saved in csv")
+
 		i = 0
 		legend = ['Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin']
 		for cost,c in logi.cost:
@@ -56,11 +60,12 @@ if __name__ == '__main__':
 			if i == 3:
 				plt.plot(range(len(cost)),cost,'g')
 			i+=1
-			plt.title("Cost over iterations")
-			plt.xlabel("Iterations")
-			plt.ylabel("Cost")
+		plt.title("Cost by iterations")
+		plt.xlabel("Iterations")
+		plt.ylabel("Cost")
 		plt.legend(legend, loc='upper right', frameon=False)
 		plt.show()
+
 	except:
 		print("error")
-		exit(0)
+		exit_()

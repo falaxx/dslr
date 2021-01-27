@@ -1,6 +1,11 @@
 import numpy as np
 import csv
-# all the fonctions needed for other files
+import os
+import os.path
+from os import path
+
+def exit_():
+	os._exit(os.EX_OK)
 
 def mean_(x):
 	res = 0
@@ -40,6 +45,12 @@ def percentile_(x, percent):
 		return round(x[int(rank)],6)
 	return round((x[int((c + f) / 2)]), 6)
 
+def	sum_(arr):
+	sum = 0
+	for i in arr: 
+		sum = sum + i
+	return(sum) 
+
 class LogObj(object):
 
 	def __init__(Logreg, lr=0.1, iteration=1000):
@@ -47,33 +58,36 @@ class LogObj(object):
 		Logreg.iteration=iteration
 
 	def sigmoid_(Logreg,x):
-		return 1 / (1 + np.exp(-x))
+		return (1 / (1 + np.exp(-x)))
 	
 	def gradient_descent_(Logreg,x,h,theta,y,m,):
-		return  (theta - Logreg.lr * np.dot(x.T, (h - y)) / m)
+		return (theta - Logreg.lr * np.dot(x.T, (h - y)) / m)
 	
 	def cost_(Logreg,h,theta, y):
-		return (1 / len(y)) * (np.sum(-y.T.dot(np.log(h)) - (1 - y).T.dot(np.log(1 - h))))
+		return (1 / len(y)) * (-y.T.dot(np.log(h)) - (1 - y).T.dot(np.log(1 - h)))
 	
 	def fit_(Logreg,x,y):
 		print("Processing data..")
-		Logreg.theta = []
-		Logreg.cost = []
-		x = np.insert(x, 0, 1, axis=1)
-		m = len(y)
-		for i in np.unique(y):
-			cost = []
-			y_1vsall = np.where(y == i, 1, 0)
-			theta = np.zeros(x.shape[1])
-			for _ in range(Logreg.iteration):
-				z = x.dot(theta)
-				h = Logreg.sigmoid_(z)
-				theta = Logreg.gradient_descent_(x,h,theta,y_1vsall,m)
-				cost.append(Logreg.cost_(h,theta,y_1vsall)) 
-			Logreg.theta.append((theta, i))
-			Logreg.cost.append((cost,i))
-		print("model trained !")
-		return Logreg
+		try:
+			Logreg.theta = []
+			Logreg.cost = []
+			x = np.insert(x, 0, 1, axis=1)
+			m = len(y)
+			for i in np.unique(y):
+				cost = []
+				y_1vsall = np.where(y == i, 1, 0)
+				theta = np.zeros(x.shape[1])
+				for _ in range(Logreg.iteration):
+					h = Logreg.sigmoid_(x.dot(theta))
+					theta = Logreg.gradient_descent_(x,h,theta,y_1vsall,m)
+					cost.append(Logreg.cost_(h,theta,y_1vsall))
+				Logreg.theta.append((theta, i))
+				Logreg.cost.append((cost,i))
+			print("model trained !")
+			return Logreg
+		except:
+			print("error")
+			exit_()	
 
 	def predict(Logreg,x):
 		x = np.insert(x, 0, 1, axis=1)
@@ -110,4 +124,4 @@ def load_csv(filename):
 		return np.array(dataset, dtype=object)
 	except:
 		print("error")
-		exit(0)
+		exit_()
